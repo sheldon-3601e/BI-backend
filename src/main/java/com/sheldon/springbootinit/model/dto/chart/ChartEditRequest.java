@@ -3,12 +3,9 @@ package com.sheldon.springbootinit.model.dto.chart;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.sheldon.springbootinit.model.dto.post.PostEditRequest;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * 编辑请求
@@ -18,11 +15,17 @@ import java.util.List;
  */
 @Data
 public class ChartEditRequest implements Serializable {
+
     /**
      * id
      */
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
+
+    /**
+     * 图表名称
+     */
+    private String name;
 
     /**
      * 分析目标
@@ -32,12 +35,12 @@ public class ChartEditRequest implements Serializable {
     /**
      * 图表数据
      */
-    private String chartdata;
+    private String chartData;
 
     /**
      * 图表类型
      */
-    private String charttype;
+    private String chartType;
 
 
     @TableField(exist = false)

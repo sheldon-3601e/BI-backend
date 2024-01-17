@@ -1,6 +1,5 @@
 package com.sheldon.springbootinit.service.impl;
 
-import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sheldon.springbootinit.constant.CommonConstant;
@@ -37,28 +36,28 @@ public class ChartServiceImpl extends ServiceImpl<ChartMapper, Chart>
             return queryWrapper;
         }
         Long id = chartQueryRequest.getId();
+        String name = chartQueryRequest.getName();
         Long userId = chartQueryRequest.getUserId();
         String goal = chartQueryRequest.getGoal();
-        String chartdata = chartQueryRequest.getChartdata();
-        String charttype = chartQueryRequest.getCharttype();
-        String genchart = chartQueryRequest.getGenchart();
-        String genresult = chartQueryRequest.getGenresult();
+        String chartData = chartQueryRequest.getChartData();
+        String chartType = chartQueryRequest.getChartType();
+        String genChart = chartQueryRequest.getGenChart();
+        String genResult = chartQueryRequest.getGenResult();
         int current = chartQueryRequest.getCurrent();
         int pageSize = chartQueryRequest.getPageSize();
         String sortField = chartQueryRequest.getSortField();
         String sortOrder = chartQueryRequest.getSortOrder();
 
-
         // 拼接查询条件
         queryWrapper.eq(ObjectUtils.isNotEmpty(id), "id", id);
         queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "userId", userId);
         queryWrapper.like(StringUtils.isNotBlank(goal), "goal", goal);
-        queryWrapper.like(StringUtils.isNotBlank(chartdata), "chartdata", chartdata);
-        queryWrapper.like(StringUtils.isNotBlank(charttype), "charttype", charttype);
-        queryWrapper.like(StringUtils.isNotBlank(genchart), "genchart", genchart);
-        queryWrapper.like(StringUtils.isNotBlank(genresult), "genresult", genresult);
-        queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
-                sortField);
+        queryWrapper.like(StringUtils.isNotBlank(chartData), "chartData", chartData);
+        queryWrapper.like(StringUtils.isNotBlank(chartType), "chartType", chartType);
+        queryWrapper.like(StringUtils.isNotBlank(genChart), "genChart", genChart);
+        queryWrapper.like(StringUtils.isNotBlank(genResult), "genResult", genResult);
+        queryWrapper.like(StringUtils.isNotBlank(name), "name", name);
+
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);
         return queryWrapper;

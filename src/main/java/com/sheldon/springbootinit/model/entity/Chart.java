@@ -25,6 +25,11 @@ public class Chart implements Serializable {
     private Long userId;
 
     /**
+     * 图表名称
+     */
+    private String name;
+
+    /**
      * 分析目标
      */
     private String goal;
@@ -32,38 +37,38 @@ public class Chart implements Serializable {
     /**
      * 图表数据
      */
-    private String chartdata;
+    private String chartData;
 
     /**
      * 图表类型
      */
-    private String charttype;
+    private String chartType;
 
     /**
      * 生成的图表数据
      */
-    private String genchart;
+    private String genChart;
 
     /**
      * 生成的分析结论
      */
-    private String genresult;
+    private String genResult;
 
     /**
      * 创建时间
      */
-    private Date createtime;
+    private Date createTime;
 
     /**
      * 更新时间
      */
-    private Date updatetime;
+    private Date updateTime;
 
     /**
      * 是否删除
      */
     @TableLogic
-    private Integer isdelete;
+    private Integer isDelete;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

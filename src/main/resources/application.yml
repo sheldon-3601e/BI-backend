@@ -101,3 +101,8 @@ knife4j:
         api-rule: package
         api-rule-resources:
           - com.sheldon.springbootinit.controller
+# 鱼聪明平台Id
+yuapi:
+  client:
+    access-key: rv329n20fk2u7tcf1e6bwt5757eukhtt
+    secret-key: c800iwf8zfma8k1fkgoq7shx4jwxlfw3

@@ -26,6 +26,10 @@ public class ChartQueryRequest extends PageRequest implements Serializable {
      */
     private Long id;
 
+    /**
+     * 图表名称
+     */
+    private String name;
 
     /**
      * 用户 id
@@ -40,24 +44,22 @@ public class ChartQueryRequest extends PageRequest implements Serializable {
     /**
      * 图表数据
      */
-    private String chartdata;
+    private String chartData;
 
     /**
      * 图表类型
      */
-    private String charttype;
+    private String chartType;
 
     /**
      * 生成的图表数据
      */
-    private String genchart;
+    private String genChart;
 
     /**
      * 生成的分析结论
      */
-    private String genresult;
-
-
+    private String genResult;
 
     private static final long serialVersionUID = 1L;
 }

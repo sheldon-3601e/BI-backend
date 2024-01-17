@@ -31,7 +31,8 @@ drop table if exists chart;
 create table if not exists chart
 (
     id         bigint auto_increment comment 'id' primary key,
-    userId    bigint                             not null comment '创建用户 id',
+    userId     bigint                             not null comment '创建用户 id',
+    name       varchar(128)                       null comment '图标名称',
     goal       text                               null comment '分析目标',
     chartData  text                               null comment '图表数据',
     chartType  varchar(256)                       null comment '图表类型',
