@@ -7,6 +7,9 @@ import com.sheldon.springbootinit.model.entity.Chart;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sheldon.springbootinit.model.entity.Post;
 
+import java.util.List;
+import java.util.Map;
+
 /**
 * @author 26483
 * @description 针对表【chart(图表)】的数据库操作Service
@@ -21,5 +24,9 @@ public interface ChartService extends IService<Chart> {
      * @return
      */
     QueryWrapper<Chart> getQueryWrapper(ChartQueryRequest chartQueryRequest);
+
+    void createChartInfo(String data, Long chartId);
+
+    List<Map<String, Object>> getChartInfoById(Long chartId);
 
 }

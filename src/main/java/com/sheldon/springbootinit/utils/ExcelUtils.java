@@ -24,13 +24,6 @@ import java.util.stream.Collectors;
 public class ExcelUtils {
 
     public static String excelToCsv(MultipartFile multipartFile) {
-//        File file = null;
-//        try {
-//            file = ResourceUtils.getFile("classpath:my_test_excel.xlsx");
-//
-//        } catch (FileNotFoundException e) {
-//            throw new RuntimeException(e);
-//        }
 
         // 转化为 Csv文件
         StringBuilder stringBuilder = new StringBuilder();
@@ -46,6 +39,7 @@ public class ExcelUtils {
 
             // 读取表头
             LinkedHashMap<Integer, String> headerMap = (LinkedHashMap<Integer, String>) list.get(0);
+
             /*
             headerMap.values().stream().filter（）
               1. headerMap.values() 获取所有的 value
@@ -55,7 +49,6 @@ public class ExcelUtils {
              */
             List<String> headerList = headerMap.values().stream().filter(ObjectUtils::isNotEmpty).collect(Collectors.toList());
             String header = StrUtil.join(",", headerList);
-            // System.out.println(header);
             stringBuilder.append(header).append("\n");
 
             // 读取数据

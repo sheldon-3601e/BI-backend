@@ -9,8 +9,10 @@
             <id property="userId" column="userId" jdbcType="BIGINT"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
             <result property="goal" column="goal" jdbcType="VARCHAR"/>
-            <result property="chartData" column="chartData" jdbcType="VARCHAR"/>
             <result property="chartType" column="chartType" jdbcType="VARCHAR"/>
+            <result property="chartData" column="chartData" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="execMessage" column="execMessage" jdbcType="VARCHAR"/>
             <result property="genChart" column="genChart" jdbcType="VARCHAR"/>
             <result property="genResult" column="genResult" jdbcType="VARCHAR"/>
             <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
@@ -19,8 +21,18 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,`name`,userId,goal,chartData,
-        chartType,genChart,genResult,
-        createTime,updateTime,isDelete
+        id,userId,name,
+        goal,chartType,chartData,
+        status,execMessage,genChart,
+        genResult,createTime,updateTime,
+        isDelete
     </sql>
+
+    <insert id="insertChartInfo" parameterType="string">
+        ${sqlData}
+    </insert>
+
+    <select id="getChartInfoById" parameterType="string" resultType="map">
+        ${querySql}
+    </select>
 </mapper>
