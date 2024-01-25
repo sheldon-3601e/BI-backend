@@ -5,19 +5,19 @@
 <mapper namespace="com.sheldon.springbootinit.mapper.ChartMapper">
 
     <resultMap id="BaseResultMap" type="com.sheldon.springbootinit.model.entity.Chart">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <id property="userId" column="userId" jdbcType="BIGINT"/>
-            <result property="name" column="name" jdbcType="VARCHAR"/>
-            <result property="goal" column="goal" jdbcType="VARCHAR"/>
-            <result property="chartType" column="chartType" jdbcType="VARCHAR"/>
-            <result property="chartData" column="chartData" jdbcType="VARCHAR"/>
-            <result property="status" column="status" jdbcType="INTEGER"/>
-            <result property="execMessage" column="execMessage" jdbcType="VARCHAR"/>
-            <result property="genChart" column="genChart" jdbcType="VARCHAR"/>
-            <result property="genResult" column="genResult" jdbcType="VARCHAR"/>
-            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
-            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
-            <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <id property="userId" column="userId" jdbcType="BIGINT"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="goal" column="goal" jdbcType="VARCHAR"/>
+        <result property="chartType" column="chartType" jdbcType="VARCHAR"/>
+        <result property="chartData" column="chartData" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="execMessage" column="execMessage" jdbcType="VARCHAR"/>
+        <result property="genChart" column="genChart" jdbcType="VARCHAR"/>
+        <result property="genResult" column="genResult" jdbcType="VARCHAR"/>
+        <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+        <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -28,11 +28,4 @@
         isDelete
     </sql>
 
-    <insert id="insertChartInfo" parameterType="string">
-        ${sqlData}
-    </insert>
-
-    <select id="getChartInfoById" parameterType="string" resultType="map">
-        ${querySql}
-    </select>
 </mapper>

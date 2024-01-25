@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- @author <a href="https://github.com/sheldon-3601e">sheldon</a> -->
-<!-- @from <a href="https://github.com/sheldon-3601e">github</a> -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -12,9 +10,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.sheldon</groupId>
-    <artifactId>springboot-init</artifactId>
+    <artifactId>BI-backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>springboot-init</name>
+    <name>BI-backend</name>
     <properties>
         <java.version>1.8</java.version>
     </properties>

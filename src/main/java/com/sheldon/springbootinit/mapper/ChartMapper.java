@@ -14,10 +14,6 @@ import java.util.Map;
 */
 public interface ChartMapper extends BaseMapper<Chart> {
 
-    boolean insertChartInfo(String sqlData);
-
-    List<Map<String, Object>> getChartInfoById(String querySql);
-
 }
 
 

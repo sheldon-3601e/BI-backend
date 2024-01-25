@@ -25,8 +25,4 @@ public interface ChartService extends IService<Chart> {
      */
     QueryWrapper<Chart> getQueryWrapper(ChartQueryRequest chartQueryRequest);
 
-    void createChartInfo(String data, Long chartId);
-
-    List<Map<String, Object>> getChartInfoById(Long chartId);
-
 }
