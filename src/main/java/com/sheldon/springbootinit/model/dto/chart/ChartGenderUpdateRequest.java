@@ -1,7 +1,5 @@
 package com.sheldon.springbootinit.model.dto.chart;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -13,8 +11,12 @@ import java.io.Serializable;
  * @from <a href="https://github.com/sheldon-3601e">github</a>
  */
 @Data
-public class ChartGenderRequest implements Serializable {
+public class ChartGenderUpdateRequest implements Serializable {
 
+    /**
+     * 图表Id
+     */
+    private Long chartId;
 
     /**
      * 图表名称
