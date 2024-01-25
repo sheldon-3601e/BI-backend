@@ -44,4 +44,11 @@ public interface ChartInfoService extends IService<Chart> {
      */
     boolean deleteChartInfoById(Long chartId);
 
+    /**
+     * 异步请求 AI 生成结果
+     * @param chart
+     * @param data
+     */
+    void genderChartInfo(Chart chart, String data);
+
 }

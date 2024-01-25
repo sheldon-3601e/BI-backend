@@ -24,6 +24,7 @@ import com.sheldon.springbootinit.service.UserService;
 import com.sheldon.springbootinit.utils.ExcelUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -97,7 +98,7 @@ public class ChartController {
      * @param request
      * @return
      */
-
+    @Transactional
     @PostMapping("/delete")
     public BaseResponse<Boolean> deleteChart(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
         if (deleteRequest == null || deleteRequest.getId() <= 0) {
@@ -113,7 +114,7 @@ public class ChartController {
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
         }
 
-        // TODO 添加事务
+        // 添加事务
         boolean res2 = chartInfoService.deleteChartInfoById(id);
         boolean res1 = chartService.removeById(id);
         return ResultUtils.success(res1 && !res2);
@@ -258,6 +259,7 @@ public class ChartController {
      * @return
      */
     @PostMapping("/gender")
+    @Transactional
     public BaseResponse<BiResponse> genChartByAi(@RequestPart("file") MultipartFile multipartFile,
                                                  ChartGenderRequest chartGenderRequest, HttpServletRequest request) {
         String name = chartGenderRequest.getName();
@@ -391,6 +393,7 @@ public class ChartController {
      * @return 返回异步执行结果
      */
     @PostMapping("/gender/async")
+    @Transactional(rollbackFor = Exception.class) // 只回滚 Exception 及其子类异常
     public BaseResponse<BiResponse> genChartByAiAsync(@RequestPart("file") MultipartFile multipartFile,
                                                       ChartGenderRequest chartGenderRequest, HttpServletRequest request) {
         // 从请求对象中获取参数
@@ -426,18 +429,6 @@ public class ChartController {
         // 将 Excel 转为 Csv 文件
         String data = ExcelUtils.excelToCsv(multipartFile);
 
-        // 构建 AI 请求字符串
-        StringBuilder userInput = new StringBuilder();
-        userInput.append("'Analysis goal:").append("\n");
-        userInput.append(goal);
-        if (StrUtil.isNotEmpty(chartType)) {
-            userInput.append("，请使用").append(chartType);
-        }
-        userInput.append("\n");
-        userInput.append("Raw data：").append("\n");
-        userInput.append(data).append("'").append("\n");
-        String userInputString = userInput.toString();
-
         // 保存图表到数据库
         Chart chart = new Chart();
         chart.setUserId(loginUser.getId());
@@ -454,86 +445,7 @@ public class ChartController {
         chartInfoService.createChartInfo(data, chart.getId());
 
         // 异步执行图表分析任务
-        CompletableFuture.runAsync(() -> {
-            try {
-                // 更新图表状态为“执行中”
-                Chart updateChart = new Chart();
-                updateChart.setId(chart.getId());
-                updateChart.setStatus(ChartStatueEnum.WORKING.getValue());
-                boolean res = chartService.updateById(updateChart);
-                if (!res) {
-                    handleChartError(chart.getId(), "图表状态更新 ‘执行中’ 失败");
-                    return;
-                }
-
-    /*            // 调用 AI 服务进行图表分析
-                String result = aiManager.doChart(MODEL_ID, userInputString);
-                if (StrUtil.isEmpty(result)) {
-                    throw new BusinessException(ErrorCode.OPERATION_ERROR, "AI服务异常");
-                }
-
-                // 解析结果
-                String[] split = result.split("【【【【【");
-                if (split.length != 3) {
-                    throw new BusinessException(ErrorCode.OPERATION_ERROR, "AI服务异常");
-                }
-
-                String genCart = split[1];
-                String genResult = split[2];
-                // 提取生成的代码
-                String regex = "\\{([^{}]+)\\}";
-                Pattern pattern = Pattern.compile(regex);
-                Matcher matcher = pattern.matcher(genCart);
-
-                while (matcher.find()) {
-                    String matchedGenCart = matcher.group(1);
-                }*/
-
-                // 创建模拟数据
-                String matchedGenCart = ("{\n" +
-                        "    \"title\": {\n" +
-                        "        \"text\": \"网站用户人数趋势\",\n" +
-                        "        \"subtext\": \"数据来源：Raw data\"\n" +
-                        "    },\n" +
-                        "    \"xAxis\": {\n" +
-                        "        \"type\": \"category\",\n" +
-                        "        \"data\": [\"1\", \"2\", \"3\"]\n" +
-                        "    },\n" +
-                        "    \"yAxis\": {\n" +
-                        "        \"type\": \"value\"\n" +
-                        "    },\n" +
-                        "    \"series\": [\n" +
-                        "        {\n" +
-                        "            \"name\": \"用户人数\",\n" +
-                        "            \"type\": \"bar\",\n" +
-                        "            \"data\": [10, 20, 30]\n" +
-                        "        }\n" +
-                        "    ]\n" +
-                        "}");
-                String genResult = ("网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多," +
-                        "网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多" +
-                        "网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多," +
-                        "网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多，" +
-                        "网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多，" +
-                        "网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多，" +
-                        "网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多，" +
-                        "网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多，" +
-                        "网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多");
-
-                Chart updateChartResult = new Chart();
-                updateChartResult.setId(chart.getId());
-                updateChartResult.setStatus(ChartStatueEnum.SUCCEED.getValue());
-                updateChartResult.setGenChart(matchedGenCart);
-                updateChartResult.setGenResult(genResult);
-                boolean updateResult = chartService.updateById(updateChartResult);
-                if (!updateResult) {
-                    handleChartError(chart.getId(), "图表状态更新 ‘成功’ 失败");
-                }
-            } catch (Exception e) {
-                // 处理图表分析过程中的异常
-                handleChartError(chart.getId(), "图表分析失败：" + e.getMessage());
-            }
-        }, threadPoolExecutor);
+        chartInfoService.genderChartInfo(chart, data);
 
         // 封装返回值
         BiResponse biResponse = new BiResponse();
@@ -549,6 +461,7 @@ public class ChartController {
      * @param request            HTTP 请求对象
      * @return 返回异步执行结果
      */
+    @Transactional
     @PostMapping("/gender/update/async")
     public BaseResponse<BiResponse> genUpdateChartByAiAsync(@RequestPart("file") MultipartFile multipartFile,
                                                             ChartGenderUpdateRequest chartGenderUpdateRequest, HttpServletRequest request) {
@@ -586,18 +499,6 @@ public class ChartController {
         // 将 Excel 转为 Csv 文件
         String data = ExcelUtils.excelToCsv(multipartFile);
 
-        // 构建 AI 请求字符串
-        StringBuilder userInput = new StringBuilder();
-        userInput.append("'Analysis goal:").append("\n");
-        userInput.append(goal);
-        if (StrUtil.isNotEmpty(chartType)) {
-            userInput.append("，请使用").append(chartType);
-        }
-        userInput.append("\n");
-        userInput.append("Raw data：").append("\n");
-        userInput.append(data).append("'").append("\n");
-        String userInputString = userInput.toString();
-
         // 保存图表到数据库
         Chart chart = new Chart();
         chart.setId(chartId);
@@ -616,110 +517,13 @@ public class ChartController {
         chartInfoService.createChartInfo(data, chart.getId());
 
         // 异步执行图表分析任务
-        CompletableFuture.runAsync(() -> {
-            try {
-                // 更新图表状态为“执行中”
-                Chart updateChart = new Chart();
-                updateChart.setId(chartId);
-                updateChart.setStatus(ChartStatueEnum.WORKING.getValue());
-                boolean res = chartService.updateById(updateChart);
-                if (!res) {
-                    handleChartError(chart.getId(), "图表状态更新 ‘执行中’ 失败");
-                    return;
-                }
-
-    /*            // 调用 AI 服务进行图表分析
-                String result = aiManager.doChart(MODEL_ID, userInputString);
-                if (StrUtil.isEmpty(result)) {
-                    throw new BusinessException(ErrorCode.OPERATION_ERROR, "AI服务异常");
-                }
-
-                // 解析结果
-                String[] split = result.split("【【【【【");
-                if (split.length != 3) {
-                    throw new BusinessException(ErrorCode.OPERATION_ERROR, "AI服务异常");
-                }
-
-                String genCart = split[1];
-                String genResult = split[2];
-                // 提取生成的代码
-                String regex = "\\{([^{}]+)\\}";
-                Pattern pattern = Pattern.compile(regex);
-                Matcher matcher = pattern.matcher(genCart);
-
-                while (matcher.find()) {
-                    String matchedGenCart = matcher.group(1);
-                }*/
-
-                // 创建模拟数据
-                String matchedGenCart = ("{\n" +
-                        "    \"title\": {\n" +
-                        "        \"text\": \"网站用户人数趋势\",\n" +
-                        "        \"subtext\": \"数据来源：Raw data\"\n" +
-                        "    },\n" +
-                        "    \"xAxis\": {\n" +
-                        "        \"type\": \"category\",\n" +
-                        "        \"data\": [\"1\", \"2\", \"3\"]\n" +
-                        "    },\n" +
-                        "    \"yAxis\": {\n" +
-                        "        \"type\": \"value\"\n" +
-                        "    },\n" +
-                        "    \"series\": [\n" +
-                        "        {\n" +
-                        "            \"name\": \"用户人数\",\n" +
-                        "            \"type\": \"bar\",\n" +
-                        "            \"data\": [10, 20, 30]\n" +
-                        "        }\n" +
-                        "    ]\n" +
-                        "}");
-                String genResult = ("网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多," +
-                        "网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多" +
-                        "网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多," +
-                        "网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多，" +
-                        "网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多，" +
-                        "网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多，" +
-                        "网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多，" +
-                        "网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多，" +
-                        "网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多网站用户数量逐渐增长，周六和周日用户数量较多，周一用户数量较少，周二到周五用户数量逐渐增多");
-
-                Chart updateChartResult = new Chart();
-                updateChartResult.setId(chartId);
-                updateChartResult.setStatus(ChartStatueEnum.SUCCEED.getValue());
-                updateChartResult.setGenChart(matchedGenCart);
-                updateChartResult.setGenResult(genResult);
-                boolean updateResult = chartService.updateById(updateChartResult);
-                if (!updateResult) {
-                    handleChartError(chart.getId(), "图表状态更新 ‘成功’ 失败");
-                }
-            } catch (Exception e) {
-                // 处理图表分析过程中的异常
-                handleChartError(chart.getId(), "图表分析失败：" + e.getMessage());
-            }
-        }, threadPoolExecutor);
+        chartInfoService.genderChartInfo(chart, data);
 
         // 封装返回值
         BiResponse biResponse = new BiResponse();
         biResponse.setId(chart.getId());
         return ResultUtils.success(biResponse);
     }
-
-    /**
-     * 处理图表分析过程中的错误
-     *
-     * @param chartId 图表 ID
-     * @param message 错误信息
-     */
-    public void handleChartError(Long chartId, String message) {
-        Chart chart = new Chart();
-        chart.setId(chartId);
-        chart.setStatus(ChartStatueEnum.FAILED.getValue());
-        chart.setExecMessage(message);
-        boolean updateResult = chartService.updateById(chart);
-        if (!updateResult) {
-            log.error("图表状态更新 '失败' 失败，图表id：{},失败原因:{}", chartId, message);
-        }
-    }
-
 
     /**
      * 根据 id 获取图表原始数据
