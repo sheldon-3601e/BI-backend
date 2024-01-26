@@ -49,6 +49,6 @@ public interface ChartInfoService extends IService<Chart> {
      * @param chart
      * @param data
      */
-    void genderChartInfo(Chart chart, String data);
+    void genderChartInfo(Chart chart);
 
 }
