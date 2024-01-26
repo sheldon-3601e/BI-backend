@@ -21,6 +21,6 @@ class MyMessageProducerTest {
 
     @Test
     void sendMessage() {
-        myMessageProducer.sendMessage("code_test_exchange", "my_routing", "hello world");
+        myMessageProducer.sendMessage("code_test_exchange", "my_routingKey", "hello world");
     }
 }

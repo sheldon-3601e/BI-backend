@@ -38,7 +38,7 @@ public class BiMessageConsumer {
     @Resource
     private ChartInfoService chartInfoService;
 
-    @RabbitListener(queues = {BiMqConstant.QUEUE_NAME}, ackMode = "MANUAL")
+/*    @RabbitListener(queues = {BiMqConstant.QUEUE_NAME}, ackMode = "MANUAL")
     public void sendMessage(String message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) Long deliveryTag) {
         log.info("接收到消息：{}", message);
         try {
@@ -78,6 +78,6 @@ public class BiMessageConsumer {
                 log.error("消息拒绝失败：{}", ex.getMessage());
             }
         }
-    }
+    }*/
 
 }
