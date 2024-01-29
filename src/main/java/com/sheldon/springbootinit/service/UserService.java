@@ -7,9 +7,8 @@ import com.sheldon.springbootinit.model.entity.User;
 import com.sheldon.springbootinit.model.vo.LoginUserVO;
 import com.sheldon.springbootinit.model.vo.UserVO;
 
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
+import java.util.List;
 
 /**
  * 用户服务
