@@ -326,14 +326,6 @@ public class ChartController {
         String genCart = split[1];
         String genResult = split[2];
         // 提取生成的代码
-        String regex = "\\{([^{}]+)\\}";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(genCart);
-
-        String matchedGenCart = null;
-        while (matcher.find()) {
-            matchedGenCart = matcher.group(1);
-        }
 
         // 保存图表到数据库
         Chart chart = new Chart();
@@ -341,8 +333,9 @@ public class ChartController {
         chart.setName(name);
         chart.setGoal(goal);
         chart.setChartType(chartType);
-        chart.setGenChart(matchedGenCart);
+        chart.setGenChart(genCart);
         chart.setGenResult(genResult);
+        chart.setStatus(ChartStatueEnum.SUCCEED.getValue());
         boolean saveResult = chartService.save(chart);
         if (!saveResult) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "图表保持失败");
@@ -353,7 +346,7 @@ public class ChartController {
 
         // 封装返回值
         BiResponse biResponse = new BiResponse();
-        biResponse.setGenChart(matchedGenCart);
+        biResponse.setGenChart(genCart);
         biResponse.setGenResult(genResult);
         biResponse.setId(chart.getId());
         return ResultUtils.success(biResponse);
