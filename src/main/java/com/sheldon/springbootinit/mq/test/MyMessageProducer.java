@@ -1,4 +1,4 @@
-package com.sheldon.springbootinit.bizmq.test;
+package com.sheldon.springbootinit.mq.test;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
@@ -12,7 +12,7 @@ import javax.annotation.Resource;
  * @Version 1.0
  * @Description TODO
  */
-@Component
+//@Component
 public class MyMessageProducer {
 
     @Resource

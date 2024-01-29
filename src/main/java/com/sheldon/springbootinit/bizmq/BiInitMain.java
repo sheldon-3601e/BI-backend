@@ -6,6 +6,8 @@ import com.rabbitmq.client.ConnectionFactory;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @ClassName MqInitMain
@@ -17,7 +19,8 @@ import java.io.IOException;
 @Slf4j
 public class BiInitMain {
 
-    public static void main(String[] args) {
+    public static void biInit() {
+
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
         Connection connection = null;
@@ -25,11 +28,36 @@ public class BiInitMain {
             connection = factory.newConnection();
             Channel channel = connection.createChannel();
 
-            channel.exchangeDeclare(BiMqConstant.EXCHANGE_NAME, BiMqConstant.EXCHANGE_TYPE);
+            // 声明交换机
+            // 声明等待任务交换机
+            channel.exchangeDeclare(BiMqConstant.EXCHANGE_WAITING_NAME, BiMqConstant.EXCHANGE_TYPE,true);
+            // 声明失败任务交换机，即死信交换机
+            channel.exchangeDeclare(BiMqConstant.EXCHANGE_FAILED_NAME, BiMqConstant.EXCHANGE_TYPE,true);
+            log.info("MQ 交换机声明完成");
 
             // 声明队列
-            channel.queueDeclare(BiMqConstant.QUEUE_NAME, true, false, false, null);
-            channel.queueBind(BiMqConstant.QUEUE_NAME, BiMqConstant.EXCHANGE_NAME, BiMqConstant.ROUTING_KEY);
+
+            // 声明等待任务队列
+            // 绑定死信交换机
+            Map<String, Object> args = new HashMap<String, Object>();
+            args.put("x-dead-letter-exchange", BiMqConstant.EXCHANGE_FAILED_NAME);
+            channel.queueDeclare(BiMqConstant.QUEUE_WAITING_NAME, true, false, false, args);
+            // 绑定等待任务交换机
+            channel.queueBind(BiMqConstant.QUEUE_WAITING_NAME, BiMqConstant.EXCHANGE_WAITING_NAME, BiMqConstant.ROUTING_KEY_WAITING);
+            log.info("声明等待任务队列完成");
+
+            // 声明失败任务队列
+            channel.queueDeclare(BiMqConstant.QUEUE_FAILED_NAME, true, false, false, null);
+            // 绑定死信交换机
+            channel.queueBind(BiMqConstant.QUEUE_FAILED_NAME, BiMqConstant.EXCHANGE_FAILED_NAME, BiMqConstant.ROUTING_KEY_FAILED);
+            log.info("声明失败任务队列完成");
+
+            // 声明成功任务队列
+            channel.queueDeclare(BiMqConstant.QUEUE_SUCCEED_NAME, true, false, false, null);
+            log.info("声明成功任务队列完成");
+
+            log.info("MQ初始化成功");
+
         } catch (Exception e) {
             log.error("MQ初始化失败", e);
         } finally {

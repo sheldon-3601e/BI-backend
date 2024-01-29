@@ -10,19 +10,38 @@ package com.sheldon.springbootinit.bizmq;
 public class BiMqConstant {
 
     /**
-     * 交换机名称
+     * 等待任务交换机名称
      */
-    public static final String EXCHANGE_NAME = "Bi_exchange";
+    public static final String EXCHANGE_WAITING_NAME = "Bi_exchange_waiting";
 
     /**
-     * 队列名称
+     * 失败任务交换机名称
      */
-    public static final String QUEUE_NAME = "Bi_queue";
+    public static final String EXCHANGE_FAILED_NAME = "Bi_exchange_failed";
+
+    /**
+     * 等待任务队列名称
+     */
+    public static final String QUEUE_WAITING_NAME = "Bi_queue_waiting";
+
+    /**
+     * 成功任务队列名称
+     */
+    public static final String QUEUE_SUCCEED_NAME = "Bi_queue_succeed";
+
+    /**
+     * 失败任务队列名称
+     */
+    public static final String QUEUE_FAILED_NAME = "Bi_queue_failed";
 
     /**
      * 路由key
      */
-    public static final String ROUTING_KEY = "Bi_routingKey";
+    public static final String ROUTING_KEY_WAITING = "Bi_waiting_routingKey";
+    /**
+     * 路由key
+     */
+    public static final String ROUTING_KEY_FAILED = "Bi_failed_routingKey";
 
     /**
      * 交换机类型

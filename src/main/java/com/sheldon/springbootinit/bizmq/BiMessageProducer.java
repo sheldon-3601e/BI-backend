@@ -19,7 +19,7 @@ public class BiMessageProducer {
     private RabbitTemplate rabbitTemplate;
 
     public void sendMessage( String message) {
-        rabbitTemplate.convertAndSend(BiMqConstant.EXCHANGE_NAME, BiMqConstant.ROUTING_KEY, message);
+        rabbitTemplate.convertAndSend(BiMqConstant.EXCHANGE_WAITING_NAME, BiMqConstant.ROUTING_KEY_WAITING, message);
     }
 
 }

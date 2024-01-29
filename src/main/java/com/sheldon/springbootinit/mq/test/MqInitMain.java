@@ -1,4 +1,4 @@
-package com.sheldon.springbootinit.bizmq.test;
+package com.sheldon.springbootinit.mq.test;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;

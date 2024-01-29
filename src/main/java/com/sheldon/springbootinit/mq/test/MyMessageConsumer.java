@@ -1,4 +1,4 @@
-package com.sheldon.springbootinit.bizmq.test;
+package com.sheldon.springbootinit.mq.test;
 
 import com.rabbitmq.client.Channel;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import javax.annotation.Resource;
  * @Version 1.0
  * @Description TODO
  */
-@Component
+//@Component
 @Slf4j
 public class MyMessageConsumer {
 

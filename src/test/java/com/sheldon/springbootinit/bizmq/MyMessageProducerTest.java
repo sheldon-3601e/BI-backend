@@ -1,8 +1,7 @@
 package com.sheldon.springbootinit.bizmq;
 
-import com.sheldon.springbootinit.bizmq.test.MyMessageProducer;
+import com.sheldon.springbootinit.mq.test.MyMessageProducer;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
 
@@ -13,7 +12,7 @@ import javax.annotation.Resource;
  * @Version 1.0
  * @Description TODO
  */
-@SpringBootTest
+//@SpringBootTest
 class MyMessageProducerTest {
 
     @Resource
