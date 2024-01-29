@@ -4,7 +4,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sheldon.springbootinit.annotation.AuthCheck;
-import com.sheldon.springbootinit.bizmq.BiMessageProducer;
+import com.sheldon.springbootinit.bizmq.MsgProducer;
 import com.sheldon.springbootinit.common.BaseResponse;
 import com.sheldon.springbootinit.common.DeleteRequest;
 import com.sheldon.springbootinit.common.ErrorCode;
@@ -70,7 +70,7 @@ public class ChartController {
     private ThreadPoolExecutor threadPoolExecutor;
 
     @Resource
-    private BiMessageProducer biMessageProducer;
+    private MsgProducer msgProducer;
 
     // region 增删改查
 
@@ -521,7 +521,7 @@ public class ChartController {
         chartInfoService.createChartInfo(data, newChartId);
 
         // 使用异步消息队列执行图表分析任务
-        biMessageProducer.sendMessage(String.valueOf(newChartId));
+        msgProducer.sendWaitingMsg(String.valueOf(newChartId));
 
         // 封装返回值
         BiResponse biResponse = new BiResponse();
@@ -602,7 +602,7 @@ public class ChartController {
         chartInfoService.createChartInfo(data, newChartId);
 
         // 使用异步消息队列执行图表分析任务
-        biMessageProducer.sendMessage(String.valueOf(newChartId));
+        msgProducer.sendWaitingMsg(String.valueOf(newChartId));
 
         // 封装返回值
         BiResponse biResponse = new BiResponse();

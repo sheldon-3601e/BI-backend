@@ -34,13 +34,10 @@ public class BiInitMain {
             // 声明失败任务交换机，即死信交换机
             channel.exchangeDeclare(BiMqConstant.EXCHANGE_FAILED_NAME, BiMqConstant.EXCHANGE_TYPE,true);
             log.info("MQ 交换机声明完成");
-
-            // 声明队列
-
-            // 声明等待任务队列
-            // 绑定死信交换机
+            // 声明死信任务队列
             Map<String, Object> args = new HashMap<String, Object>();
             args.put("x-dead-letter-exchange", BiMqConstant.EXCHANGE_FAILED_NAME);
+            args.put("x-dead-letter-routing-key", BiMqConstant.ROUTING_KEY_FAILED);
             channel.queueDeclare(BiMqConstant.QUEUE_WAITING_NAME, true, false, false, args);
             // 绑定等待任务交换机
             channel.queueBind(BiMqConstant.QUEUE_WAITING_NAME, BiMqConstant.EXCHANGE_WAITING_NAME, BiMqConstant.ROUTING_KEY_WAITING);

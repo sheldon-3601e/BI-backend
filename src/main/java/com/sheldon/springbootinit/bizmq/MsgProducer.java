@@ -13,12 +13,12 @@ import javax.annotation.Resource;
  * @Description TODO
  */
 @Component
-public class BiMessageProducer {
+public class MsgProducer {
 
     @Resource
     private RabbitTemplate rabbitTemplate;
 
-    public void sendMessage( String message) {
+    public void sendWaitingMsg(String message) {
         rabbitTemplate.convertAndSend(BiMqConstant.EXCHANGE_WAITING_NAME, BiMqConstant.ROUTING_KEY_WAITING, message);
     }
 
