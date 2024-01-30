@@ -12,7 +12,7 @@
         ${deleteSql}
     </delete>
 
-    <select id="getChartInfoById" parameterType="string" resultType="map">
+    <select id="getChartInfoById" parameterType="string" resultType="java.util.LinkedHashMap">
         ${querySql}
     </select>
 </mapper>

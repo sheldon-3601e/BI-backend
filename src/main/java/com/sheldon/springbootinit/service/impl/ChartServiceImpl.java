@@ -72,6 +72,11 @@ public class ChartServiceImpl extends ServiceImpl<ChartMapper, Chart>
         return queryWrapper;
     }
 
+    @Override
+    public String getChartKeysById(Long chartId) {
+        return chartMapper.getChartKeysById(chartId);
+    }
+
 }
 
 

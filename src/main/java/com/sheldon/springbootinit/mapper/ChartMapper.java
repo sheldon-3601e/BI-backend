@@ -2,6 +2,7 @@ package com.sheldon.springbootinit.mapper;
 
 import com.sheldon.springbootinit.model.entity.Chart;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,8 @@ import java.util.Map;
 */
 public interface ChartMapper extends BaseMapper<Chart> {
 
+    @Select("select chartData from chart where id = #{chartId}")
+    String getChartKeysById(Long chartId);
 }
 
 

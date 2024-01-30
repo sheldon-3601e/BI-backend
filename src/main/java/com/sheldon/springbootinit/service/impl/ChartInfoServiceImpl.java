@@ -28,8 +28,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -160,8 +158,9 @@ public class ChartInfoServiceImpl extends ServiceImpl<ChartMapper, Chart>
     @Override
     public List<Map<String, Object>> getChartInfoById(Long chartId) {
 
+        String keys = chartService.getChartKeysById(chartId);
         String tableName = "chart_" + chartId;
-        String sql = "select * from " + tableName;
+        String sql = "select id," + keys + " from " + tableName;
         List<Map<String, Object>> chartInfoList = chartInfoMapper.getChartInfoById(sql);
         return chartInfoList;
     }
