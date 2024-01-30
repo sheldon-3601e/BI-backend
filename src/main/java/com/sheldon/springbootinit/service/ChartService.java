@@ -20,4 +20,10 @@ public interface ChartService extends IService<Chart> {
      */
     QueryWrapper<Chart> getQueryWrapper(ChartQueryRequest chartQueryRequest);
 
+    /**
+     * 根据图表 Id 获取图表数据列名
+     * @param chartId
+     * @return
+     */
+    String getChartKeysById(Long chartId);
 }
