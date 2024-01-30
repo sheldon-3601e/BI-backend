@@ -14,18 +14,17 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * @ServerEndpoint 注解是一个类层次的注解，它的功能主要是将目前的类定义成一个websocket服务器端,
  * 注解的值将被用于监听用户连接的终端访问URL地址,客户端可以通过这个URL来连接到WebSocket服务器端
  */
-//@Component
+@Component
 @ServerEndpoint("/websocket/{userId}")
 @Slf4j
 public class WebSocketService {
- 
-    private static ConcurrentHashMap<String, CopyOnWriteArraySet<WebSocketService>> userwebSocketMap = new ConcurrentHashMap<String, CopyOnWriteArraySet<WebSocketService>>();
- 
-    private static ConcurrentHashMap<String, Integer> count = new ConcurrentHashMap<String, Integer>();
- 
+
+    private static final ConcurrentHashMap<String, CopyOnWriteArraySet<WebSocketService>> userwebSocketMap = new ConcurrentHashMap<String, CopyOnWriteArraySet<WebSocketService>>();
+
+    private static final ConcurrentHashMap<String, Integer> count = new ConcurrentHashMap<String, Integer>();
+
     private String userId;
- 
- 
+
     /*
      * 与某个客户端的连接会话，需要通过它来给客户端发送数据
      */

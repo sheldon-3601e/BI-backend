@@ -5,6 +5,7 @@ import com.sheldon.springbootinit.model.entity.Chart;
 import com.sheldon.springbootinit.model.enums.ChartStatueEnum;
 import com.sheldon.springbootinit.service.ChartInfoService;
 import com.sheldon.springbootinit.service.ChartService;
+import com.sheldon.springbootinit.webSocket.WebSocketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -31,6 +32,9 @@ public class MsgConsumer {
 
     @Resource
     private ChartInfoService chartInfoService;
+
+    @Resource
+    private WebSocketService webSocketService;
 
     @RabbitListener(queues = {BiMqConstant.QUEUE_FAILED_NAME}, ackMode = "MANUAL")
     public void receiveFailedMsg(String message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) Long deliveryTag) {
@@ -63,6 +67,9 @@ public class MsgConsumer {
     public void receiveSucceedMsg(String message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) Long deliveryTag) {
         log.info("MQ:接收分析成功图表信息：{}", message);
         try {
+            Chart chart = chartService.getById(message);
+            webSocketService.sendMessage(String.valueOf(chart.getUserId()), message);
+            log.info("图表分析成功，发送消息到前端：{}", message);
             channel.basicAck(deliveryTag, true);
         } catch (IOException e) {
             throw new RuntimeException(e);

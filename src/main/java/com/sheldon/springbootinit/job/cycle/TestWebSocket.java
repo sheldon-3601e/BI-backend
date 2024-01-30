@@ -15,7 +15,7 @@ import java.io.IOException;
  * @from <a href="https://github.com/sheldon-3601e">github</a>
  */
 // todo 取消注释开启任务
-@Component
+//@Component
 @Slf4j
 public class TestWebSocket {
 
