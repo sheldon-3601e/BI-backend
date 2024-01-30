@@ -110,6 +110,9 @@ public class ChartInfoServiceImpl extends ServiceImpl<ChartMapper, Chart>
         }
         createTableStatement.deleteCharAt(createTableStatement.lastIndexOf(","));
         createTableStatement.append(");\n");
+        // 建立数据存储表
+        //System.out.println("Generated CREATE TABLE statement:\n" + createTableStatement);
+        chartInfoMapper.insertChartInfo(createTableStatement.toString());
 
         // Generate INSERT INTO statement
         StringBuilder insertStatement = new StringBuilder("INSERT INTO " + tableName + " (");
@@ -133,13 +136,8 @@ public class ChartInfoServiceImpl extends ServiceImpl<ChartMapper, Chart>
         }
         insertStatement.deleteCharAt(insertStatement.lastIndexOf(","));
         insertStatement.append(";\n");
-
-        // 建立数据存储表
-//        System.out.println("Generated CREATE TABLE statement:\n" + createTableStatement);
-        chartInfoMapper.insertChartInfo(createTableStatement.toString());
-
         // 插入数据
-//        System.out.println("Generated INSERT INTO statement:\n" + insertStatement.toString());
+        //System.out.println("Generated INSERT INTO statement:\n" + insertStatement.toString());
         chartInfoMapper.insertChartInfo(insertStatement.toString());
     }
 
@@ -158,9 +156,8 @@ public class ChartInfoServiceImpl extends ServiceImpl<ChartMapper, Chart>
     @Override
     public List<Map<String, Object>> getChartInfoById(Long chartId) {
 
-        String keys = chartService.getChartKeysById(chartId);
         String tableName = "chart_" + chartId;
-        String sql = "select id," + keys + " from " + tableName;
+        String sql = "select * from " + tableName;
         List<Map<String, Object>> chartInfoList = chartInfoMapper.getChartInfoById(sql);
         return chartInfoList;
     }
