@@ -299,33 +299,90 @@ public class ChartController {
         // 转化为 Csv文件
         String data = ExcelUtils.excelToCsv(multipartFile);
 
-        // 拼接AI请求
-        StringBuilder userInput = new StringBuilder();
-        userInput.append("'Analysis goal:").append("\n");
-        userInput.append(goal);
-        if (StrUtil.isNotEmpty(chartType)) {
-            userInput.append("，请使用").append(chartType);
+//        // 拼接AI请求
+//        StringBuilder userInput = new StringBuilder();
+//        userInput.append("'Analysis goal:").append("\n");
+//        userInput.append(goal);
+//        if (StrUtil.isNotEmpty(chartType)) {
+//            userInput.append("，请使用").append(chartType);
+//        }
+//        userInput.append("\n");
+//        userInput.append("Raw data：").append("\n");
+//        userInput.append(data).append("'").append("\n");
+//        String userInputString = userInput.toString();
+//
+//        // 调用AI服务
+//        String result = aiManager.doChart(AiConstant.MODEL_ID, userInput.toString());
+//        if (StrUtil.isEmpty(result)) {
+//            throw new BusinessException(ErrorCode.OPERATION_ERROR, "AI服务异常");
+//        }
+//
+//        // 解析结果
+//        String[] split = result.split("【【【【【");
+//        if (split.length != 3) {
+//            throw new BusinessException(ErrorCode.OPERATION_ERROR, "AI服务异常");
+//        }
+//
+//        // 提取生成的代码
+//        String genCart = split[1];
+//        String genResult = split[2];
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
-        userInput.append("\n");
-        userInput.append("Raw data：").append("\n");
-        userInput.append(data).append("'").append("\n");
-        String userInputString = userInput.toString();
-
-        // 调用AI服务
-        String result = aiManager.doChart(AiConstant.MODEL_ID, userInput.toString());
-        if (StrUtil.isEmpty(result)) {
-            throw new BusinessException(ErrorCode.OPERATION_ERROR, "AI服务异常");
-        }
-
-        // 解析结果
-        String[] split = result.split("【【【【【");
-        if (split.length != 3) {
-            throw new BusinessException(ErrorCode.OPERATION_ERROR, "AI服务异常");
-        }
-
-        String genCart = split[1];
-        String genResult = split[2];
-        // 提取生成的代码
+        String genCart = "\n" +
+                "{\n" +
+                "  \"title\": {\n" +
+                "    \"text\": \"每天人数占比\",\n" +
+                "    \"x\": \"center\"\n" +
+                "  },\n" +
+                "  \"tooltip\": {\n" +
+                "    \"trigger\": \"item\",\n" +
+                "    \"formatter\": \"{a} <br/>{b} : {c} ({d}%)\"\n" +
+                "  },\n" +
+                "  \"legend\": {\n" +
+                "    \"orient\": \"vertical\",\n" +
+                "    \"left\": \"left\",\n" +
+                "    \"data\": [\"1号\", \"2号\", \"3号\", \"4号\", \"5号\", \"6号\", \"7号\", \"8号\"]\n" +
+                "  },\n" +
+                "  \"series\": [\n" +
+                "    {\n" +
+                "      \"name\": \"人数占比\",\n" +
+                "      \"type\": \"pie\",\n" +
+                "      \"radius\": \"55%\",\n" +
+                "      \"center\": [\"50%\", \"60%\"],\n" +
+                "      \"data\": [\n" +
+                "        { \"value\": 10, \"name\": \"1号\" },\n" +
+                "        { \"value\": 20, \"name\": \"2号\" },\n" +
+                "        { \"value\": 30, \"name\": \"3号\" },\n" +
+                "        { \"value\": 20, \"name\": \"4号\" },\n" +
+                "        { \"value\": 2, \"name\": \"5号\" },\n" +
+                "        { \"value\": 32, \"name\": \"6号\" },\n" +
+                "        { \"value\": 20, \"name\": \"7号\" },\n" +
+                "        { \"value\": 10, \"name\": \"8号\" }\n" +
+                "      ],\n" +
+                "      \"itemStyle\": {\n" +
+                "        \"emphasis\": {\n" +
+                "          \"shadowBlur\": 10,\n" +
+                "          \"shadowOffsetX\": 0,\n" +
+                "          \"shadowColor\": \"rgba(0, 0, 0, 0.5)\"\n" +
+                "        }\n" +
+                "      }\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}\n";
+        String genResult = "\n" +
+                "根据提供的原始数据，我们可以得出以下结论：\n" +
+                "- 在1号，10名用户占总人数的10%。\n" +
+                "- 在2号，20名用户占总人数的20%。\n" +
+                "- 在3号，30名用户占总人数的30%。\n" +
+                "- 在4号，20名用户占总人数的20%。\n" +
+                "- 在5号，2名用户占总人数的2%。\n" +
+                "- 在6号，32名用户占总人数的32%。\n" +
+                "- 在7号，20名用户占总人数的20%。\n" +
+                "- 在8号，10名用户占总人数的10%。\n" +
+                "通过这个饼图，我们可以直观地了解每天人数占总人数的比例。";
 
         // 保存图表到数据库
         Chart chart = new Chart();
