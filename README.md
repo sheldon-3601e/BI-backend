@@ -1,5 +1,5 @@
 <!-- PROJECT LOGO -->
-<br />
+
 <div align="center">
         <img src="./images/bi_logo.svg" alt="Logo" width="80" height="80">
     <h3 align="center">洞见智能BI平台</h3>
@@ -17,74 +17,145 @@
 </div>
 
 
-
 <!-- TABLE OF CONTENTS -->
 
 <details>
   <summary>Table of Contents</summary>
   <ol>
     <li>
-      <a href="#about-the-project">About The Project</a>
+      <a href="#关于项目">关于项目</a>
       <ul>
-        <li><a href="#built-with">Built With</a></li>
+        <li><a href="#项目架构图">项目架构图</a></li>
+        <li><a href="#技术栈">技术栈</a></li>
+        <li><a href="#业务流程">业务流程</a></li>
       </ul>
     </li>
     <li>
-      <a href="#getting-started">Getting Started</a>
+      <a href="#用法">用法</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
+        <li><a href="#演示视频">演示视频</a></li>
+        <li><a href="#项目截图">项目截图</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
+    <li><a href="#快速开始">快速开始</a>
+      <ul>
+        <li><a href="#先决条件">先决条件</a></li>
+        <li><a href="#安装">安装</a></li>
+      </ul>
+      </li>
+    <li><a href="#联系方式">联系方式</a></li>
   </ol>
 </details>
 
 
 
 
+
+
+
 <!-- ABOUT THE PROJECT -->
 
-## About The Project
+## 关于项目
 
-[![Product Name Screen Shot](https://gitee.com/sheldon_kkk/typora-image/raw/master/img/202401312053277.png)
+### 项目架构图
 
-There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I
-created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I
-think this is it.
+<div align="center">
+    <img src="images/bi_architecture.svg" alt="Architecture" width="600" height="600">
+</div>
+<div>
+    <p>
+        该项目共有三个模块：
+    <ul>
+        <li>前端模块（React）：负责接受用户请求，展示用户分析图表结论数据</li>
+        <li>后端管理模块（SpringBoot）：负责系统的后端管理，用户登录，图表管理，权限校验</li>
+        <li>图表分析模块（SpringBoot）：通过消息队列，接受图表分析任务，请求AI服务，并处理分析结果</li>
+    </ul>
+    </p>
+<p align="center">
+    <a href="https://github.com/sheldon-3601e/BI-frontend">前端模块</a>
+    ·
+    <a href="https://github.com/sheldon-3601e/BI-backend">后端管理模块</a>
+    ·
+    <a href="https://github.com/sheldon-3601e/BI-service">图表分析模块</a>
+</p>
+</div>
 
-Here's why:
 
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should implement DRY principles to the rest of your life :smile:
+### 技术栈
 
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near
-future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all
-the people have contributed to expanding this template!
+#### 前端
 
-Use the `BLANK_README.md` to get started.
+- React 18
+- Ant Design Pro 5.x 脚手架
+- Umi 4前端框架
+- Ant Design 组件库
+- Echarts 可视化库
+- OpenAPI 前端代码生成
+- WebSocket 消息通知
+
+#### 后端
+
+- SpringBoot
+- MySQL 数据库
+- Mybatis-Plus 及 mybatis X 自动生成
+- Redis + Redisson 限流
+- RabbitMQ 消息队列
+- 星火大模型SDK（AI服务）
+- Easy Excel处理工具
+- Swagger + Knife4j 接口文档
+- Hutool、Apache Common Utils 等工具库
+
+### 业务流程
+
+<div align="center">
+    <img src="images/bi_flow.svg" alt="Architecture" width="600" height="600">
+</div>
+
+用户分析图表的业务流程分析
+
+1. 用户在前端网页提交分析要求和原始数据
+2. 后端管理服务器接受请求，并将图表的基本信息和压缩后的数据存储在MySQL数据库中
+3. 后端管理服务器将要分析的图表Id ,发送到 RabbitMQ 的交换机 `Bi_waiting_exchange` 
+4. 交换机 `Bi_waiting_exchange ` 将任务分发给消息队列中，并由对应的智能分析服务器接受
+5. 智能分析服务器通过监听队列 ，进行图表分析
+   1. 从MySQL数据库中查询要分析的图表信息，拼接用户请求
+   2. 通过星火大模型SDK请求AI服务
+   3. 请求成功
+      1. 获取返回值，处理返回值，提取所需信息
+      2. 将生成的信息保存到数据库
+      3. 通过`BI_succeed_queue` 通知后端管理服务器
+      4. 后端管理服务器接受分析成功的消息，通过WebSocket通知前端用户
+   4. 请求失败
+      1. 通过死信交换机`BI_failed_exchange` 通知后端管理服务器
+      2. 后端管理服务器接受分析失败的消息，将数据库中图表的状态改为失败。通过WebSocket通知前端用户
+
+<div align="center">
+    <img src="images/bi_queue.svg" alt="Architecture" width="600" height="600">
+</div>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Built With
+<!-- USAGE EXAMPLES -->
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for
-the acknowledgements section. Here are a few examples.
+## 用法
 
-* [![Next][Next.js]][Next-url]
-* [![React][React.js]][React-url]
-* [![Vue][Vue.js]][Vue-url]
-* [![Angular][Angular.io]][Angular-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Laravel][Laravel.com]][Laravel-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
+### 演示视频
+
+
+
+### 网站截图
+
+![登陆页面](https://gitee.com/sheldon_kkk/typora-image/raw/master/img/202401312343866.svg)
+
+![](https://gitee.com/sheldon_kkk/typora-image/raw/master/img/202401312346131.svg)
+
+![show_05](https://gitee.com/sheldon_kkk/typora-image/raw/master/img/202401312348118.svg)
+
+![show_03](https://gitee.com/sheldon_kkk/typora-image/raw/master/img/202401312347547.svg)
+
+![show_04](https://gitee.com/sheldon_kkk/typora-image/raw/master/img/202401312347900.svg)
+
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -92,108 +163,46 @@ the acknowledgements section. Here are a few examples.
 
 <!-- GETTING STARTED -->
 
-## Getting Started
+## 快速开始
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+这是一个示例，说明如何在本地设置项目的说明。若要启动并运行本地副本，请按照以下简单示例步骤操作。
 
-### Prerequisites
+### 先决条件
 
-This is an example of how to list things you need to use the software and how to install them.
+列出使用该软件所需的内容
 
-* npm
+* npm@16.20.2
+* MySQL@8.1.0
+* Redis
+* RabbitMQ
 
-  ```sh
-  npm install npm@latest -g
-  ```
+### 安装
 
-### Installation
+下面是一个示例，说明如何安装和设置应用。
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't
-rely on any external dependencies or services._
-
-1. Get a free API Key at [https://example.com](https://example.com)
-
-2. Clone the repo
+1. 克隆项目到本地
 
    ```sh
    git clone https://github.com/your_username_/Project-Name.git
    ```
 
-3. Install NPM packages
+2. 安装依赖s
 
    ```sh
    npm install
    ```
 
-4. Enter your API in `config.js`
+3. 在图表分析模块中`application.yml`中，填入星火大模型的参数
 
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+   ```yml
+   appid: xxx
+   apiKey: xxx
+   apiSecret: xxx
    ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+4. 启动 Redis 和 RabbitMQ 服务
 
-
-
-<!-- USAGE EXAMPLES -->
-
-## Usage
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos
-work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ROADMAP -->
-
-## Roadmap
-
-- [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
-
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (
-and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- CONTRIBUTING -->
-
-## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any
-contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also
-simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- LICENSE -->
-
-## License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+5. 分别启动各个模块
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -201,93 +210,11 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <!-- CONTACT -->
 
-## Contact
+## 联系方式
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
+Your Name - Sheldon - email@Sheldon_kkk@126.com
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-
-## Acknowledgments
-
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites
-to kick things off!
-
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
-* [Malven's Grid Cheatsheet](https://grid.malven.co/)
-* [Img Shields](https://shields.io)
-* [GitHub Pages](https://pages.github.com)
-* [Font Awesome](https://fontawesome.com)
-* [React Icons](https://react-icons.github.io/react-icons/search)
+Personal homepage: [https://github.com/sheldon-3601e](https://github.com/sheldon-3601e)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
-
-[contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
-
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
-
-[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
-
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
-
-[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
-
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
-
-[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-
-[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
-
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-
-[linkedin-url]: https://linkedin.com/in/othneildrew
-
-[product-screenshot]: images/screenshot.png
-
-[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-
-[Next-url]: https://nextjs.org/
-
-[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-
-[React-url]: https://reactjs.org/
-
-[Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
-
-[Vue-url]: https://vuejs.org/
-
-[Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
-
-[Angular-url]: https://angular.io/
-
-[Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
-
-[Svelte-url]: https://svelte.dev/
-
-[Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
-
-[Laravel-url]: https://laravel.com
-
-[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
-
-[Bootstrap-url]: https://getbootstrap.com
-
-[JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-
-[JQuery-url]: https://jquery.com
