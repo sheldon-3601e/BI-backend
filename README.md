@@ -9,18 +9,36 @@
         区别于传统 BI 平台，用户只需输入数据及分析需求，即可自动生成可视化图表及分析结论，提高数据分析效率。
     </p>
 </div>
-
 <!-- TABLE OF CONTENTS -->
 
 <details>
   <summary>Table of Contents</summary>
   <ol>
-    <li><a href="#关于项目">关于项目</a></li>
-    <li><a href="#用法">用法</a></li>
-    <li><a href="#快速开始">快速开始</a></li>
+    <li>
+      <a href="#关于项目">关于项目</a>
+      <ul>
+        <li><a href="#项目架构图">项目架构图</a></li>
+        <li><a href="#技术栈">技术栈</a></li>
+        <li><a href="#业务流程">业务流程</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#用法">用法</a>
+      <ul>
+        <li><a href="#演示视频">演示视频</a></li>
+        <li><a href="#项目截图">项目截图</a></li>
+      </ul>
+    </li>
+    <li><a href="#快速开始">快速开始</a>
+      <ul>
+        <li><a href="#先决条件">先决条件</a></li>
+        <li><a href="#安装">安装</a></li>
+      </ul>
+      </li>
     <li><a href="#联系方式">联系方式</a></li>
   </ol>
 </details>
+
 
 ## 关于项目
 
