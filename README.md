@@ -1,18 +1,12 @@
 <!-- PROJECT LOGO -->
 
 <div align="center">
-        <img src="./images/bi_logo.svg" alt="Logo" width="80" height="80">
+        <img src="./images/bi_logo.svg" alt="Logo" width="100" height="100">
     <h3 align="center">洞见智能BI平台</h3>
     <p align="center">
         基于 Spring Boot + MQ + AIGC（+ React）的智能数据分析平台。
         <br />
         区别于传统 BI平台，用户只需要输入数据及分析需求，就可以自动生成可视化图表及分析结论，提高数据分析效率。
-        <br />
-        <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
-        ·
-        <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
-        ·
-        <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
     </p>
 </div>
 
@@ -108,7 +102,7 @@
 ### 业务流程
 
 <div align="center">
-    <img src="images/bi_flow.svg" alt="Architecture" width="600" height="600">
+    <img src="images/bi_flow.svg" alt="Architecture" width="900" height="900">
 </div>
 
 用户分析图表的业务流程分析
@@ -130,7 +124,7 @@
       2. 后端管理服务器接受分析失败的消息，将数据库中图表的状态改为失败。通过WebSocket通知前端用户
 
 <div align="center">
-    <img src="images/bi_queue.svg" alt="Architecture" width="600" height="600">
+    <img src="images/bi_queue.svg" alt="Architecture" width="900" height="900">
 </div>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
