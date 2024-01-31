@@ -122,7 +122,8 @@
 ### 演示视频
 
 <video controls>
-  <source src="./images/bi_show.mp4" type="video/mp4">
+  <source src="https://github.com/sheldon-3601e/BI-backend/assets/120535868/78219988-df88-4645-9487-9ef763915e3e
+" type="video/mp4">
   你的游览器不支持该视频格式
 </video>
 
