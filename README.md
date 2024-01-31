@@ -123,11 +123,6 @@
 [演示视频](https://github.com/sheldon-3601e/BI-backend/assets/120535868/78219988-df88-4645-9487-9ef763915e3e
 )
 
-<video controls>
-  <source src="https://github.com/sheldon-3601e/BI-backend/assets/120535868/78219988-df88-4645-9487-9ef763915e3e
-" type="video/mp4">
-  你的游览器不支持该视频格式
-</video>
 
 ### 网站截图
 
