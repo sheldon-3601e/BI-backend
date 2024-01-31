@@ -1,164 +1,260 @@
-# SpringBoot 项目初始模板
-
-> 作者：[程序员鱼皮](https://github.com/lisheldon)
-> 仅分享于 [编程导航知识星球](https://sheldon.icu)
-
-基于 Java SpringBoot 的项目初始模板，整合了常用框架和主流业务的示例代码。
-
-只需 1 分钟即可完成内容网站的后端！！！大家还可以在此基础上快速开发自己的项目。
-
-[toc]
-
-## 模板特点
-
-### 主流框架 & 特性
-
-- Spring Boot 2.7.x（贼新）
-- Spring MVC
-- MyBatis + MyBatis Plus 数据访问（开启分页）
-- Spring Boot 调试工具和项目处理器
-- Spring AOP 切面编程
-- Spring Scheduler 定时任务
-- Spring 事务注解
-
-### 数据存储
-
-- MySQL 数据库
-- Redis 内存数据库
-- Elasticsearch 搜索引擎
-- 腾讯云 COS 对象存储
-
-### 工具类
-
-- Easy Excel 表格处理
-- Hutool 工具库
-- Apache Commons Lang3 工具类
-- Lombok 注解
-
-### 业务特性
-
-- Spring Session Redis 分布式登录
-- 全局请求响应拦截器（记录日志）
-- 全局异常处理器
-- 自定义错误码
-- 封装通用响应类
-- Swagger + Knife4j 接口文档
-- 自定义权限注解 + 全局校验
-- 全局跨域处理
-- 长整数丢失精度解决
-- 多环境配置
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+    <a href="https://github.com/sheldon-3601e/BI-backend">
+        <img src="https://gitee.com/sheldon_kkk/typora-image/raw/master/img/202401312031711.svg" alt="Logo" width="80" height="80">
+    </a>
+    <h3 align="center">洞见智能BI平台</h3>
+    <p align="center">
+        基于 Spring Boot + MQ + AIGC（+ React）的智能数据分析平台。
+        <br />
+        区别于传统 BI平台，洞见摒弃了繁琐的图表创建和数据选择过程，
+        <br />
+        用户只需要输入数据及分析需求，就可以自动生成可视化图表及分析结论，提高数据分析效率。
+        <br />
+        <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
+        ·
+        <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
+        ·
+        <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
+    </p>
+</div>
 
 
-## 业务功能
 
-- 提供示例 SQL（用户、帖子、帖子点赞、帖子收藏表）
-- 用户登录、注册、注销、更新、检索、权限管理
-- 帖子创建、删除、编辑、更新、数据库检索、ES 灵活检索
-- 帖子点赞、取消点赞
-- 帖子收藏、取消收藏、检索已收藏帖子
-- 帖子全量同步 ES、增量同步 ES 定时任务
-- 支持微信开放平台登录
-- 支持微信公众号订阅、收发消息、设置菜单
-- 支持分业务的文件上传
+<!-- TABLE OF CONTENTS -->
 
-### 单元测试
-
-- JUnit5 单元测试
-- 示例单元测试类
-
-### 架构设计
-
-- 合理分层
-
-
-## 快速上手
-
-> 所有需要修改的地方鱼皮都标记了 `todo`，便于大家找到修改的位置~
-
-### MySQL 数据库
-
-1）修改 `application.yml` 的数据库配置为你自己的：
-
-```yml
-spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/my_db
-    username: root
-    password: 123456
-```
-
-2）执行 `sql/create_table.sql` 中的数据库语句，自动创建库表
-
-3）启动项目，访问 `http://localhost:8101/api/doc.html` 即可打开接口文档，不需要写前端就能在线调试接口了~
-
-![](doc/swagger.png)
-
-### Redis 分布式登录
-
-1）修改 `application.yml` 的 Redis 配置为你自己的：
-
-```yml
-spring:
-  redis:
-    database: 1
-    host: localhost
-    port: 6379
-    timeout: 5000
-    password: 123456
-```
-
-2）修改 `application.yml` 中的 session 存储方式：
-
-```yml
-spring:
-  session:
-    store-type: redis
-```
-
-3）移除 `MainApplication` 类开头 `@SpringBootApplication` 注解内的 exclude 参数：
-
-修改前：
-
-```java
-@SpringBootApplication(exclude = {RedisAutoConfiguration.class})
-```
-
-修改后：
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+  </ol>
+</details>
 
 
-```java
-@SpringBootApplication
-```
 
-### Elasticsearch 搜索引擎
 
-1）修改 `application.yml` 的 Elasticsearch 配置为你自己的：
+<!-- ABOUT THE PROJECT -->
 
-```yml
-spring:
-  elasticsearch:
-    uris: http://localhost:9200
-    username: root
-    password: 123456
-```
+## About The Project
 
-2）复制 `sql/post_es_mapping.json` 文件中的内容，通过调用 Elasticsearch 的接口或者 Kibana Dev Tools 来创建索引（相当于数据库建表）
+[![Product Name Screen Shot](https://gitee.com/sheldon_kkk/typora-image/raw/master/img/202401312053277.png)
 
-```
-PUT post_v1
-{
- 参数见 sql/post_es_mapping.json 文件
-}
-```
+There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
 
-这步不会操作的话需要补充下 Elasticsearch 的知识，或者自行百度一下~
+Here's why:
 
-3）开启同步任务，将数据库的帖子同步到 Elasticsearch
+* Your time should be focused on creating something amazing. A project that solves a problem and helps others
+* You shouldn't be doing the same tasks over and over like creating a README from scratch
+* You should implement DRY principles to the rest of your life :smile:
 
-找到 job 目录下的 `FullSyncPostToEs` 和 `IncSyncPostToEs` 文件，取消掉 `@Component` 注解的注释，再次执行程序即可触发同步：
+Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have contributed to expanding this template!
 
-```java
-// todo 取消注释开启任务
-//@Component
-```
+Use the `BLANK_README.md` to get started.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+### Built With
+
+This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+
+* [![Next][Next.js]][Next-url]
+* [![React][React.js]][React-url]
+* [![Vue][Vue.js]][Vue-url]
+* [![Angular][Angular.io]][Angular-url]
+* [![Svelte][Svelte.dev]][Svelte-url]
+* [![Laravel][Laravel.com]][Laravel-url]
+* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
+* [![JQuery][JQuery.com]][JQuery-url]
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- GETTING STARTED -->
+
+## Getting Started
+
+This is an example of how you may give instructions on setting up your project locally.
+To get a local copy up and running follow these simple example steps.
+
+### Prerequisites
+
+This is an example of how to list things you need to use the software and how to install them.
+
+* npm
+
+  ```sh
+  npm install npm@latest -g
+  ```
+
+### Installation
+
+_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
+
+1. Get a free API Key at [https://example.com](https://example.com)
+
+2. Clone the repo
+
+   ```sh
+   git clone https://github.com/your_username_/Project-Name.git
+   ```
+
+3. Install NPM packages
+
+   ```sh
+   npm install
+   ```
+
+4. Enter your API in `config.js`
+
+   ```js
+   const API_KEY = 'ENTER YOUR API';
+   ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- USAGE EXAMPLES -->
+
+## Usage
+
+Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+
+_For more examples, please refer to the [Documentation](https://example.com)_
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- ROADMAP -->
+
+## Roadmap
+
+- [x] Add Changelog
+- [x] Add back to top links
+- [ ] Add Additional Templates w/ Examples
+- [ ] Add "components" document to easily copy & paste sections of the readme
+- [ ] Multi-language Support
+  - [ ] Chinese
+  - [ ] Spanish
+
+See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- CONTRIBUTING -->
+
+## Contributing
+
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+Don't forget to give the project a star! Thanks again!
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- LICENSE -->
+
+## License
+
+Distributed under the MIT License. See `LICENSE.txt` for more information.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- CONTACT -->
+
+## Contact
+
+Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
+
+Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- ACKNOWLEDGMENTS -->
+
+## Acknowledgments
+
+Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
+
+* [Choose an Open Source License](https://choosealicense.com)
+* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
+* [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
+* [Malven's Grid Cheatsheet](https://grid.malven.co/)
+* [Img Shields](https://shields.io)
+* [GitHub Pages](https://pages.github.com)
+* [Font Awesome](https://fontawesome.com)
+* [React Icons](https://react-icons.github.io/react-icons/search)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
+[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
+[contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
+[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
+[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
+[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
+[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
+[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
+[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
+[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://linkedin.com/in/othneildrew
+[product-screenshot]: images/screenshot.png
+[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
+[Next-url]: https://nextjs.org/
+[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+[React-url]: https://reactjs.org/
+[Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
+[Vue-url]: https://vuejs.org/
+[Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
+[Angular-url]: https://angular.io/
+[Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
+[Svelte-url]: https://svelte.dev/
+[Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
+[Laravel-url]: https://laravel.com
+[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
+[Bootstrap-url]: https://getbootstrap.com
+[JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
+[JQuery-url]: https://jquery.com
