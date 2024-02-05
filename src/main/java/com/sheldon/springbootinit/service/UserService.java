@@ -109,4 +109,11 @@ public interface UserService extends IService<User> {
      */
     QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest);
 
+    /**
+     * 验证是否还有调用次数
+     * @param userId 用户 id
+     * @return
+     */
+    boolean checkInvokeCount(Long userId);
+
 }

@@ -43,6 +43,11 @@ public class User implements Serializable {
     private String userAvatar;
 
     /**
+     * 调用次数
+     */
+    private Integer genNum;
+
+    /**
      * 用户角色：user/admin
      */
     private String userRole;

@@ -293,6 +293,11 @@ public class ChartController {
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR, e.getMessage());
         }
+        // 校验是否还有调用次数
+        if (!userService.checkInvokeCount(loginUser.getId())) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "调用次数不足");
+        }
+
         // 限流
         redisLimiterManager.doRateLimit("genChartByAi_" + loginUser.getId());
 
@@ -448,6 +453,10 @@ public class ChartController {
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR, e.getMessage());
         }
+        // 校验是否还有调用次数
+        if (!userService.checkInvokeCount(loginUser.getId())) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "调用次数不足");
+        }
         // 限流
         redisLimiterManager.doRateLimit("genChartByAi_" + loginUser.getId());
 
@@ -572,6 +581,7 @@ public class ChartController {
 
         // 使用异步消息队列执行图表分析任务
         msgProducer.sendWaitingMsg(String.valueOf(newChartId));
+        log.info("发送消息队列成功，chartId: {}", newChartId);
 
         // 封装返回值
         BiResponse biResponse = new BiResponse();
