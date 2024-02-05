@@ -4,7 +4,6 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.sheldon.springbootinit.service.ChartInfoService;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,21 +16,22 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * EasyExcel 测试
- *
- * @author <a href="https://github.com/sheldon-3601e">sheldon</a>
- * @from <a href="https://github.com/sheldon-3601e">github</a>
- */
-@SpringBootTest
-public class EasyExcelTest {
+import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * @ClassName ExcelUtilsTest
+ * @Author 26483
+ * @Date 2024/2/5 16:02
+ * @Version 1.0
+ * @Description TODO
+ */
+class ExcelUtilsTest {
     @Resource
     private ChartInfoService chartInfoService;
 
     @Test
     public void doImport() throws FileNotFoundException {
-        File file = ResourceUtils.getFile("classpath:my_test_excel.xlsx");
+        File file = ResourceUtils.getFile("classpath:test_data.xlsx");
         List<Map<Integer, String>> list = EasyExcel.read(file)
                 .excelType(ExcelTypeEnum.XLSX)
                 .sheet()
@@ -45,25 +45,6 @@ public class EasyExcelTest {
         MultipartFile multipartFile = new MockMultipartFile("file",
                 file.getName(), "application/octet-stream", input);
         return multipartFile;
-    }
-
-    public static String convert1(List<Map<String, Object>> dataList, List<String> keys) {
-        StringJoiner result = new StringJoiner("\n");
-        StringJoiner header = new StringJoiner(",");
-        for (String key : keys) {
-            header.add(key);
-        }
-        result.add(header.toString());
-
-        for (Map<String, Object> data : dataList) {
-            StringJoiner row = new StringJoiner(",");
-            for (String key : keys) {
-                Object value = data.get(key);
-                row.add(value != null ? value.toString() : "");
-            }
-            result.add(row.toString());
-        }
-        return result.toString();
     }
 
     public static String convert(List<Map<String, Object>> dataList, List<String> keys) {
@@ -81,7 +62,7 @@ public class EasyExcelTest {
 
     @Test
     public void doExport() throws IOException {
-        File file = ResourceUtils.getFile("classpath:my_test_excel.xlsx");
+        File file = ResourceUtils.getFile("classpath:test_data.xlsx");
         MultipartFile multipartFile = convert(file);
         String data = ExcelUtils.excelToCsv(multipartFile);
 //        System.out.println(data);
@@ -109,5 +90,4 @@ public class EasyExcelTest {
         Map<String, Object> map = list.get(0);
         System.out.println(map);
     }
-
 }
