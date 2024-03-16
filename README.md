@@ -42,7 +42,7 @@
 
 ## 关于项目
 
-### 项目架构图
+### 项目总览
 
 <div align="center">
     <img src="./images/bi_architecture.svg" alt="Architecture" width="600" height="600">
